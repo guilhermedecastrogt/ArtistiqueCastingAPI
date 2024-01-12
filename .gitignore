@@ -1,0 +1,78 @@
+﻿# Arquivos e diretórios específicos da Web API .NET
+bin/
+obj/
+*.user
+*.suo
+*.tmp
+*.log
+*.vscode/
+
+# Pacotes NuGet
+*.nuget.props
+*.paket.props
+*.paket.targets
+packages/
+
+# Arquivos de compilação
+*.dll
+*.exe
+*.pdb
+*.dll.mdb
+*.exe.mdb
+
+# Cache de build
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs2019/
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
