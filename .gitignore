@@ -1,4 +1,7 @@
-﻿# Arquivos e diretórios específicos da Web API .NET
+﻿#Local
+MigrationsLocal/
+
+# Arquivos e diretórios específicos da Web API .NET
 bin/
 obj/
 *.user
