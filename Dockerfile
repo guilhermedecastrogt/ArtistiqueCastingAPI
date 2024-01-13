@@ -17,6 +17,9 @@ COPY . .
 WORKDIR "/src"
 RUN dotnet publish "ArtistiqueCastingAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+ARG ConnectionStringName
+ENV ConnectionStringName=$ConnectionStringName
+
 # Use the runtime image again for the final image
 FROM base AS final
 WORKDIR /app

@@ -8,12 +8,14 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 
-string? SqlServerConnection = Environment.GetEnvironmentVariable("ConnectionStringName");
-SqlServerConnection = "Server=localhost,1433;Database=ArtistiqueLocal;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
-//string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = Environment.GetEnvironmentVariable("ConnectionStringName");
+if (connectionString == null)
+{
+    connectionString = "Server=localhost,1433;Database=ArtistiqueLocal;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
+}
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(SqlServerConnection); 
+    options.UseSqlServer(connectionString); 
 });
 
 builder.Services.AddTransient(typeof(IGenericsRepository<>),typeof(GenericsRepository<>));
