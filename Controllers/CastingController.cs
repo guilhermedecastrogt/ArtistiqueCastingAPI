@@ -15,6 +15,12 @@ public class CastingController : Controller
     }
     
     [HttpGet]
+    public IActionResult Index()
+    {
+        return Ok(new {message = "Casting API"});
+    }
+    
+    [HttpGet]
     [Route("list")]
     public async Task<IActionResult> List()
     {
@@ -46,7 +52,7 @@ public class CastingController : Controller
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível adicionar o casting. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível adicionar o casting. Erro: {ex}" });
         }
     }
     
