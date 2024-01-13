@@ -35,8 +35,12 @@ public class SubCategoryController : Controller
     {
         try
         {
-            await _subCategoryRepository.Add(model);
-            return Ok(new { message = "Subcategoria adicionada com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _subCategoryRepository.Add(model);
+                return Ok(new { message = "Subcategoria adicionada com sucesso!" });
+            }
+            return BadRequest(new{message = "Erro ao adicionar sebcategorias. ModelState inválido."});
         }
         catch (Exception ex)
         {
@@ -50,8 +54,12 @@ public class SubCategoryController : Controller
     {
         try
         {
-            await _subCategoryRepository.Update(model);
-            return Ok(new { message = "Subcategoria atualizada com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _subCategoryRepository.Update(model);
+                return Ok(new { message = "Subcategoria atualizada com sucesso!" });
+            }
+            return BadRequest(new { message = "Erro ao atualizar subcategoria. ModelState inválido." });
         }
         catch (Exception ex)
         {

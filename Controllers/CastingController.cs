@@ -35,8 +35,14 @@ public class CastingController : Controller
     {
         try
         {
-            await _castingRepository.Add(model);
-            return Ok(new { message = "Casting adicionado com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _castingRepository.Add(model);
+                return Ok(new { message = "Casting adicionado com sucesso!" });
+            }
+
+            return BadRequest(new { message = "Não foi possível adicionar o casting. Erro: ModelState inválido" });
+
         }
         catch (Exception ex)
         {
@@ -50,8 +56,12 @@ public class CastingController : Controller
     {
         try
         {
-            await _castingRepository.Update(model);
-            return Ok(new { message = "Casting atualizado com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _castingRepository.Update(model);
+                return Ok(new { message = "Casting atualizado com sucesso!" });
+            }
+            return BadRequest(new {message = "Não foi possível atualizar o casting. Erro: ModelState inválido"});
         }
         catch (Exception ex)
         {
@@ -65,8 +75,12 @@ public class CastingController : Controller
     {
         try
         {
-            await _castingRepository.Delete(model);
-            return Ok(new { message = "Casting deletado com sucesso!" });
+            if(ModelState.IsValid)
+            {
+                await _castingRepository.Delete(model);
+                return Ok(new { message = "Casting deletado com sucesso!" });
+            }
+            return BadRequest(new {message = "Não foi possível deletar o casting. Erro: ModelState inválido"});
         }
         catch (Exception ex)
         {

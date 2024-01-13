@@ -36,8 +36,13 @@ public class CategoryController : Controller
     {
         try
         {
-            await _categoryRepository.Add(model);
-            return Ok(new { message = "Categoria adicionada com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _categoryRepository.Add(model);
+                return Ok(new { message = "Categoria adicionada com sucesso!" });
+            }
+
+            return BadRequest(new { message = "Não foi possível adicionar categoria. ModelState inválida." });
         }
         catch (Exception ex)
         {
@@ -51,8 +56,13 @@ public class CategoryController : Controller
     {
         try
         {
-            await _categoryRepository.Update(model);
-            return Ok(new { message = "Categoria atualizada com sucesso!" });
+            if (ModelState.IsValid)
+            {
+                await _categoryRepository.Update(model);
+                return Ok(new { message = "Categoria atualizada com sucesso!" });
+            }
+
+            return BadRequest(new { message = "Não foi possível atualizar a categoria. ModelState inválida." });
         }
         catch (Exception ex)
         {
