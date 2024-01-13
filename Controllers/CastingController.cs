@@ -17,12 +17,13 @@ public class CastingController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        string? connectionString = Environment.GetEnvironmentVariable("ConnectionStringName");
+        /*string? connectionString = Environment.GetEnvironmentVariable("ConnectionStringName");
         if (connectionString == null)
         {
             return Ok(new {message = "Casting API"});
         }
-        return Ok(new {message = $"Connection String Recebida: {connectionString}"});
+        return Ok(new {message = $"Connection String Recebida: {connectionString}"});*/
+        return Ok(new {message = "Casting API"});
     }
     
     [HttpGet]
