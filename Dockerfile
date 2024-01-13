@@ -1,29 +1,24 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Use the runtime image as the base image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+# Use the SDK image for building
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ArtistiqueCastingAPI.csproj", "ArtistiqueCastingAPI/"]
-RUN dotnet restore "ArtistiqueCastingAPI/ArtistiqueCastingAPI.csproj"
-COPY . .
-WORKDIR "/src/ArtistiqueCastingAPI"
-RUN dotnet build "ArtistiqueCastingAPI.csproj" -c Release -o /app/build
 
-FROM build AS publish
+# Copy only the project file to restore dependencies
+COPY ["ArtistiqueCastingAPI.csproj", "."]
+RUN dotnet restore "ArtistiqueCastingAPI.csproj"
+
+# Copy the entire project and build it
+COPY . .
+WORKDIR "/src"
 RUN dotnet publish "ArtistiqueCastingAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-ARG ConnectionStringName
-ENV ConnectionStringName=$ConnectionStringName
-
-#ARG FtpConnectionUsername
-#ENV FtpConnectionUsername=$FtpConnectionUsername
-#ENV FtpConnectionPassword=$FtpConnectionPassword
-#ARG FtpConnectionServerUrl
-#ENV FtpConnectionServerUrl=$FtpConnectionServerUrl
-
+# Use the runtime image again for the final image
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "ArtistiqueCastingAPI.dll"]
