@@ -14,6 +14,15 @@ RUN dotnet build "ArtistiqueCastingAPI.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "ArtistiqueCastingAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+ARG ConnectionStringName
+ENV ConnectionStringName=$ConnectionStringName
+
+#ARG FtpConnectionUsername
+#ENV FtpConnectionUsername=$FtpConnectionUsername
+#ENV FtpConnectionPassword=$FtpConnectionPassword
+#ARG FtpConnectionServerUrl
+#ENV FtpConnectionServerUrl=$FtpConnectionServerUrl
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
