@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ArtistiqueCastingAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtistiqueCastingAPI.Data;
 
@@ -8,8 +9,10 @@ public class DataContext : DbContext
     {
 
     }
-    
-    
+
+    public DbSet<CastingModel> Casting { get; set; }
+    public DbSet<CategoryModel> Category { get; set; }
+    public DbSet<SubCategoryModel> SubCategory { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

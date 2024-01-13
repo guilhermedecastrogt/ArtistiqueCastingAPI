@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 string? SqlServerConnection = Environment.GetEnvironmentVariable("ConnectionStringName");
-SqlServerConnection = "Server=localhost,1433;Database=balta;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
+SqlServerConnection = "Server=localhost,1433;Database=ArtistiqueLocal;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
 //string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -19,6 +19,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddTransient(typeof(IGenericsRepository<>),typeof(GenericsRepository<>));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICastingRepository, CastingRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRespository>();
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
 
 
 builder.Services.AddControllers();
