@@ -46,7 +46,7 @@ public class CategoryController : Controller
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível adicionar a categoria. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível adicionar a categoria. Erro: {ex}" });
         }
     }
     
