@@ -77,18 +77,21 @@ public class CategoryController : Controller
     
     [HttpDelete]
     [Route("delete")]
-    public async Task<IActionResult> Delete(
-        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
+    public async Task<IActionResult> Delete([FromBody] string slug)
     {
         try
         {
+            CategoryModel model = await _categoryRepository.GetBySlug(slug);
+            if (model == null)
+            {
+                return BadRequest(new { message = "Categoria não encontrada." });
+            }
             await _categoryRepository.Delete(model);
             return Ok(new { message = "Categoria removida com sucesso!" });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível remover a categoria. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível remover a categoria. Erro: {ex}" });
         }
     }
-    
 }
