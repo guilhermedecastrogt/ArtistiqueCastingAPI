@@ -32,7 +32,7 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add([FromBody] CategoryModel model)
+    public async Task<IActionResult> Add(string model)
     {
         try
         {
@@ -42,10 +42,9 @@ public class CategoryController : Controller
                 {
                     Console.WriteLine("FROM BODY RETURN!!!");
                     Console.WriteLine("--------------------");
-                    Console.WriteLine(model.Slug);
-                    Console.WriteLine(model.Name);
+                    Console.WriteLine(model);
                     Console.WriteLine("--------------------");
-                    await _categoryRepository.Add(model);
+                    //await _categoryRepository.Add(model);
                     return Ok(new { message = "Categoria adicionada com sucesso!" });
                 }
             //}
