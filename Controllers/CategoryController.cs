@@ -32,29 +32,24 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add([FromBody] CategoryModel model, [FromForm]CategoryModel? model2)
+    public async Task<IActionResult> Add([FromBody] CategoryModel model)
     {
         try
         {
-            if(model2 != null) Console.WriteLine("FROM FORM RETURN!!!");
-            if(model != null) Console.WriteLine("FROM BODY RETURN!!!");
             //if (ModelState.IsValid)
             //{
-                Console.WriteLine("--------------------");
-                Console.WriteLine(model2.Slug);
-                Console.WriteLine(model2.Name);
-                Console.WriteLine("--------------------");
                 if (model != null)
                 {
+                    Console.WriteLine("FROM BODY RETURN!!!");
                     Console.WriteLine("--------------------");
                     Console.WriteLine(model.Slug);
                     Console.WriteLine(model.Name);
                     Console.WriteLine("--------------------");
+                    await _categoryRepository.Add(model);
+                    return Ok(new { message = "Categoria adicionada com sucesso!" });
                 }
-                await _categoryRepository.Add(model2);
-                return Ok(new { message = "Categoria adicionada com sucesso!" });
             //}
-            Console.WriteLine("ModelState inválida");
+            Console.WriteLine("ModelState nula!!!");
             return BadRequest(new { message = "Não foi possível adicionar categoria. ModelState inválida." });
         }
         catch (Exception ex)
