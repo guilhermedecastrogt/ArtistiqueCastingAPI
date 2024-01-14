@@ -34,7 +34,8 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> ModelBinder([ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
+    public async Task<IActionResult> ModelBinder(
+        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
     {
         try
         {
@@ -55,7 +56,8 @@ public class CategoryController : Controller
     
     [HttpPut]
     [Route("update")]
-    public async Task<IActionResult> Update([FromBody] CategoryModel model)
+    public async Task<IActionResult> Update(
+        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
     {
         try
         {
@@ -75,7 +77,8 @@ public class CategoryController : Controller
     
     [HttpDelete]
     [Route("delete")]
-    public async Task<IActionResult> Delete([FromBody] CategoryModel model)
+    public async Task<IActionResult> Delete(
+        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
     {
         try
         {
