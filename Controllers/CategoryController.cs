@@ -32,7 +32,7 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add(string model)
+    public async Task<IActionResult> Add([FromBody] CategoryModel model)
     {
         try
         {

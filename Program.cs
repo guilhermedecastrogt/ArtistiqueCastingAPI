@@ -41,11 +41,10 @@ builder.Services.AddResponseCompression(options =>
     options.Providers.Add<GzipCompressionProvider>();
     options.MimeTypes = 
         ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/json" });
+    options.Providers.Add<BrotliCompressionProvider>();
 });
 
 builder.Services.AddResponseCaching();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 
 
