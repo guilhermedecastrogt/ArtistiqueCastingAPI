@@ -42,9 +42,10 @@ public class CategoryController : Controller
                 {
                     Console.WriteLine("FROM BODY RETURN!!!");
                     Console.WriteLine("--------------------");
-                    Console.WriteLine(model);
+                    Console.WriteLine(model.Slug);
+                    Console.WriteLine(model.Name);
                     Console.WriteLine("--------------------");
-                    //await _categoryRepository.Add(model);
+                    await _categoryRepository.Add(model);
                     return Ok(new { message = "Categoria adicionada com sucesso!" });
                 }
             //}
