@@ -39,8 +39,8 @@ public class CategoryController : Controller
             if(model2 != null) Console.WriteLine("FROM FORM RETURN!!!");
             //if (ModelState.IsValid)
             //{
-                Console.WriteLine(model);
-                await _categoryRepository.Add(model);
+                Console.WriteLine(model2);
+                await _categoryRepository.Add(model2);
                 return Ok(new { message = "Categoria adicionada com sucesso!" });
             //}
             Console.WriteLine("ModelState inválida");
