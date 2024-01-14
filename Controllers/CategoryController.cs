@@ -39,7 +39,17 @@ public class CategoryController : Controller
             if(model2 != null) Console.WriteLine("FROM FORM RETURN!!!");
             //if (ModelState.IsValid)
             //{
-                Console.WriteLine(model2);
+                Console.WriteLine("--------------------");
+                Console.WriteLine(model2.Slug);
+                Console.WriteLine(model2.Name);
+                Console.WriteLine("--------------------");
+                if (model != null)
+                {
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine(model.Slug);
+                    Console.WriteLine(model.Name);
+                    Console.WriteLine("--------------------");
+                }
                 await _categoryRepository.Add(model2);
                 return Ok(new { message = "Categoria adicionada com sucesso!" });
             //}
