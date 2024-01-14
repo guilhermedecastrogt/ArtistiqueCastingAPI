@@ -1,5 +1,7 @@
-﻿using ArtistiqueCastingAPI.Models;
+﻿using ArtistiqueCastingAPI.ModelBinders;
+using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistiqueCastingAPI.Controllers;
@@ -32,31 +34,22 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add([FromBody] CategoryModel model)
+    public async Task<IActionResult> ModelBinder([ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
     {
         try
         {
-            //if (ModelState.IsValid)
-            //{
-                if (model != null)
-                {
-                    Console.WriteLine("FROM BODY RETURN!!!");
-                    Console.WriteLine("--------------------");
-                    Console.WriteLine(model.Slug);
-                    Console.WriteLine(model.Name);
-                    Console.WriteLine("--------------------");
-                    await _categoryRepository.Add(model);
-                    return Ok(new { message = "Categoria adicionada com sucesso!" });
-                }
-            //}
-            Console.WriteLine("ModelState nula!!!");
-            return BadRequest(new { message = "Não foi possível adicionar categoria. ModelState inválida." });
+            if (ModelState.IsValid)
+            {
+                await _categoryRepository.Add(model);
+                return Ok(new { message = "Categoria adicionada com sucesso!" });
+            }
+            Console.WriteLine($"ModelState inválido {model.Name} --- {model.Slug}");
+            return BadRequest(new { message = "Não foi possível adicionar a categoria. ModelState inválida." });
         }
         catch (Exception ex)
         {
-            
             Console.WriteLine(ex);
-            return BadRequest(new { message = $"Não foi possível adicionar a categoria. Erro: {ex}" });
+            return BadRequest(new { message = $"Não foi possível adicionar a categoria. Erro: {ex.Message}" });
         }
     }
     
