@@ -37,6 +37,7 @@ public class CategoryController : Controller
         try
         {
             if(model2 != null) Console.WriteLine("FROM FORM RETURN!!!");
+            if(model != null) Console.WriteLine("FROM BODY RETURN!!!");
             //if (ModelState.IsValid)
             //{
                 Console.WriteLine("--------------------");
