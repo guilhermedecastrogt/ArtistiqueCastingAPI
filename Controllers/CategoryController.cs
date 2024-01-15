@@ -68,7 +68,10 @@ public class CategoryController : Controller
                 if (model.Slug != model.BeforeSlug)
                 {
                     await _categoryRepository.Delete(await _categoryRepository.GetBySlug(model.BeforeSlug));
+                    
                     category.Slug = model.Slug;
+                    category.Name = model.Name;
+                    
                     await _categoryRepository.Add(category);
                     return Ok(new { message = "Categoria atualizada com sucesso!" });
                 }
