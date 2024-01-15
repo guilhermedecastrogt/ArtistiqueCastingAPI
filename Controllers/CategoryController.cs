@@ -54,7 +54,7 @@ public class CategoryController : Controller
         }
     }
     
-    [HttpPut]
+    [HttpPost]
     [Route("update")]
     public async Task<IActionResult> Update(
         [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
@@ -75,7 +75,7 @@ public class CategoryController : Controller
         }
     }
     
-    [HttpDelete]
+    [HttpPost]
     [Route("delete")]
     public async Task<IActionResult> Delete([FromBody] string slug)
     {
