@@ -81,6 +81,7 @@ public class CategoryController : Controller
     {
         try
         {
+            if(slug == null) return BadRequest(new { message = "Slug não informado." });
             CategoryModel model = await _categoryRepository.GetBySlug(slug);
             if (model == null)
             {
