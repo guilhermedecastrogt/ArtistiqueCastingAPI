@@ -62,15 +62,15 @@ public class CategoryController : Controller
     {
         try
         {
-            CategoryModel category = await _categoryRepository.GetBySlug(model.BeforeSlug);
+            CategoryModel category = await _categoryRepository.GetBySlug(model.beforeSlug);
             if (category != null)
             {
-                if (model.Slug != model.BeforeSlug)
+                if (model.slug != model.beforeSlug)
                 {
-                    await _categoryRepository.Delete(await _categoryRepository.GetBySlug(model.BeforeSlug));
+                    await _categoryRepository.Delete(await _categoryRepository.GetBySlug(model.beforeSlug));
                     
-                    category.Slug = model.Slug;
-                    category.Name = model.Name;
+                    category.Slug = model.slug;
+                    category.Name = model.name;
                     
                     await _categoryRepository.Add(category);
                     return Ok(new { message = "Categoria atualizada com sucesso!" });
