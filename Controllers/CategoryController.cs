@@ -36,7 +36,6 @@ public class CategoryController : Controller
     [Route("add")]
     public async Task<IActionResult> Add([FromBody] CategoryModel model)
     {
-        Console.WriteLine("SLUG:"+model.Slug);
         Console.WriteLine("NAME:"+model.Name);
         try
         {
@@ -59,24 +58,25 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> Update(
-        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model, string beforeSlug)
+    public async Task<IActionResult> Update([FromBody] UpdateCategoryRequestModel model)
     {
         try
         {
-            if (ModelState.IsValid)
+            CategoryModel category = await _categoryRepository.GetBySlug(model.BeforeSlug);
+            if (category != null)
             {
-                if (model.Slug != beforeSlug)
+                if (model.Slug != model.BeforeSlug)
                 {
-                    await _categoryRepository.Delete(await _categoryRepository.GetBySlug(beforeSlug));
-                    await _categoryRepository.Add(model);
+                    await _categoryRepository.Delete(await _categoryRepository.GetBySlug(model.BeforeSlug));
+                    category.Slug = model.Slug;
+                    await _categoryRepository.Add(category);
                     return Ok(new { message = "Categoria atualizada com sucesso!" });
                 }
-                await _categoryRepository.Update(model);
+                await _categoryRepository.Update(category);
                 return Ok(new { message = "Categoria atualizada com sucesso!" });
             }
 
-            return BadRequest(new { message = "Não foi possível atualizar a categoria. ModelState inválida." });
+            return BadRequest(new { message = "Não foi possível atualizar a categoria. Model não encontrada." });
         }
         catch (Exception ex)
         {
@@ -102,6 +102,25 @@ public class CategoryController : Controller
         catch (Exception ex)
         {
             return BadRequest(new { message = $"Não foi possível remover a categoria. Erro: {ex}" });
+        }
+    }
+    
+    [HttpGet]
+    [Route("get-by-slug")]
+    public async Task<IActionResult> GetBySlug(string slug)
+    {
+        try
+        {
+            CategoryModel model = await _categoryRepository.GetBySlug(slug);
+            if (model == null)
+            {
+                return BadRequest(new { message = "Categoria não encontrada." });
+            }
+            return Ok(model);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível encontrar a categoria. Erro: {ex}" });
         }
     }
 }
