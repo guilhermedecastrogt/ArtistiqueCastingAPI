@@ -34,16 +34,18 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> ModelBinder(
+    public async Task<IActionResult> Add(
         [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
     {
         try
         {
+            
             if (ModelState.IsValid)
             {
                 await _categoryRepository.Add(model);
                 return Ok(new { message = "Categoria adicionada com sucesso!" });
             }
+            if(model == null) Console.WriteLine("---------- MODEL RETURN NULL ----------");
             Console.WriteLine($"ModelState inválido {model.Name} --- {model.Slug}");
             return BadRequest(new { message = "Não foi possível adicionar a categoria. ModelState inválida." });
         }
@@ -57,12 +59,18 @@ public class CategoryController : Controller
     [HttpPost]
     [Route("update")]
     public async Task<IActionResult> Update(
-        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
+        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model, string beforeSlug)
     {
         try
         {
             if (ModelState.IsValid)
             {
+                if (model.Slug != beforeSlug)
+                {
+                    await _categoryRepository.Delete(await _categoryRepository.GetBySlug(beforeSlug));
+                    await _categoryRepository.Add(model);
+                    return Ok(new { message = "Categoria atualizada com sucesso!" });
+                }
                 await _categoryRepository.Update(model);
                 return Ok(new { message = "Categoria atualizada com sucesso!" });
             }

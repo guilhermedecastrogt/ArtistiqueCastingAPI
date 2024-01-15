@@ -14,6 +14,7 @@ public class CastingModel
     public string Name { get; set; }
     public string Description { get; set; }
     public string Image { get; set; }
+    public bool IsExclusive { get; set; }
     public string? CategorySlug { get; set; }
     public CategoryModel? Category { get; set; }
 }

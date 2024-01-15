@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 string? connectionString = Environment.GetEnvironmentVariable("ConnectionStringName");
+
 if (connectionString == null)
 {
     connectionString = "Server=localhost,1433;Database=ArtistiqueLocal;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
