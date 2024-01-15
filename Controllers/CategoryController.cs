@@ -107,7 +107,7 @@ public class CategoryController : Controller
     
     [HttpGet]
     [Route("get-by-slug")]
-    public async Task<IActionResult> GetBySlug(string slug)
+    public async Task<IActionResult> GetBySlug([FromBody] string slug)
     {
         try
         {
