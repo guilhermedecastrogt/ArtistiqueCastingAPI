@@ -43,6 +43,8 @@ public class CategoryController : Controller
                 await _categoryRepository.Add(model);
                 return Ok(new { message = "Categoria adicionada com sucesso!" });
             }
+            Console.WriteLine("SLUG:"+model.Slug);
+            Console.WriteLine("NAME:"+model.Name);
             if(model == null) Console.WriteLine("---------- MODEL RETURN NULL ----------");
             Console.WriteLine($"ModelState inválido {model.Name} --- {model.Slug}");
             return BadRequest(new { message = "Não foi possível adicionar a categoria. ModelState inválida." });
