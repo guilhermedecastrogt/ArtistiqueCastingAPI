@@ -110,8 +110,11 @@ public class CategoryController : Controller
     
     [HttpGet]
     [Route("get-by-slug")]
-    public async Task<IActionResult> GetBySlug([FromBody] string slug)
+    public async Task<IActionResult> GetBySlug([FromRoute] string slug)
     {
+        Console.WriteLine("-------------------- GET BY SLUG --------------------");
+        if(slug != null) Console.WriteLine(slug);
+        if(slug == null) return BadRequest(new { message = "Slug não informado." });
         try
         {
             CategoryModel model = await _categoryRepository.GetBySlug(slug);
