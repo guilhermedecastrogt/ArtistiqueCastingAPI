@@ -34,12 +34,10 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add(
-        [ModelBinder(BinderType = typeof(CategoryModelBinder))] CategoryModel model)
+    public async Task<IActionResult> Add([FromBody] CategoryModel model)
     {
         try
         {
-            
             if (ModelState.IsValid)
             {
                 await _categoryRepository.Add(model);
