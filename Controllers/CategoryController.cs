@@ -34,6 +34,7 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("add")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Add([FromBody] CategoryModel model)
     {
         Console.WriteLine("NAME:"+model.Name);
@@ -58,6 +59,7 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("update")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] UpdateCategoryRequestModel model)
     {
         try
@@ -89,6 +91,7 @@ public class CategoryController : Controller
     
     [HttpPost]
     [Route("delete")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromBody] string slug)
     {
         try

@@ -13,6 +13,7 @@ public class DataContext : DbContext
     public DbSet<CastingModel> Casting { get; set; }
     public DbSet<CategoryModel> Category { get; set; }
     public DbSet<SubCategoryModel> SubCategory { get; set; }
+    public DbSet<AuthenticationModel> Authentication { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
