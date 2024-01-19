@@ -24,41 +24,34 @@ public class CastingController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        /*string? connectionString = Environment.GetEnvironmentVariable("ConnectionStringName");
-        if (connectionString == null)
-        {
-            return Ok(new {message = "Casting API"});
-        }
-        return Ok(new {message = $"Connection String Recebida: {connectionString}"});*/
         return Ok(new {message = "Casting API"});
     }
     
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> List([FromBody] GetListCastingModel? model)
+    public async Task<IActionResult> List()
     {
         try
         {
-            if ((model.CategorySlug == null &&
-                 model.SubCategorySlug == null &&
-                 model.SearchByName == null) ||
-                model == null)
-            {
-                List<CastingModel> list = await _castingRepository.List();
-                return Ok(list);
-            }
-            CategoryModel category = await _categoryRepository.GetBySlug(model.CategorySlug);
-            if (category != null)
-            {
-                List<CastingModel> listCasting = await _castingRepository
-                    .FilterByCategoryAndSubCategory(category.Slug, model.SubCategorySlug);
-                return Ok(listCasting);
-            }
-            return Ok();
-            //else if (model.SearchByName != null)
-            //{
-                //List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(model.SearchByName);
-            //}
+            List<CastingModel> list = await _castingRepository.List();
+            return Ok(list);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+        }
+    }
+    
+    [HttpGet]
+    [Route("filter")]
+    public async Task<IActionResult> Filter([FromBody] GetListCastingModel model)
+    {
+        try
+        {
+            List<CastingModel> listCasting = await _castingRepository
+                .FilterByCategoryAndSubCategory(model.CategorySlug, model.SubCategorySlug);
+            
+            return Ok(listCasting);
         }
         catch (Exception ex)
         {
@@ -123,6 +116,25 @@ public class CastingController : Controller
         catch (Exception ex)
         {
             return BadRequest(new { message = $"Não foi possível deletar o casting. Erro: {ex.Message}" });
+        }
+    }
+    
+    [HttpGet]
+    [Route("search")]
+    public async Task<IActionResult> GetBySearch([FromBody] string stringSearch)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(stringSearch);
+                return Ok(listCasting);
+            }
+            return BadRequest(new {message = "Não foi possível buscar o casting. Erro: ModelState inválido"});
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível buscar o casting. Erro: {ex.Message}" });
         }
     }
     
