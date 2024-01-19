@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ArtistiqueCastingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NullableCastingModel : Migration
+    public partial class NewMap : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,19 +15,22 @@ namespace ArtistiqueCastingAPI.Migrations
                 name: "FK_Casting_Category_CategorySlug",
                 table: "Casting");
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.RenameColumn(
                 name: "CategorySlug",
                 table: "Casting",
-                type: "nvarchar(450)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(450)");
+                newName: "SubCategorySlug");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Casting_CategorySlug",
+                table: "Casting",
+                newName: "IX_Casting_SubCategorySlug");
+            
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Casting_Category_CategorySlug",
+                name: "FK_Casting_SubCategory_SubCategorySlug",
                 table: "Casting",
-                column: "CategorySlug",
-                principalTable: "Category",
+                column: "SubCategorySlug",
+                principalTable: "SubCategory",
                 principalColumn: "Slug");
         }
 
@@ -34,26 +38,26 @@ namespace ArtistiqueCastingAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Casting_Category_CategorySlug",
+                name: "FK_Casting_SubCategory_SubCategorySlug",
                 table: "Casting");
+            
 
-            migrationBuilder.AlterColumn<string>(
-                name: "CategorySlug",
+            migrationBuilder.RenameColumn(
+                name: "SubCategorySlug",
                 table: "Casting",
-                type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(450)",
-                oldNullable: true);
+                newName: "CategorySlug");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Casting_SubCategorySlug",
+                table: "Casting",
+                newName: "IX_Casting_CategorySlug");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Casting_Category_CategorySlug",
                 table: "Casting",
                 column: "CategorySlug",
                 principalTable: "Category",
-                principalColumn: "Slug",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Slug");
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240119045620_NotNullList")]
-    partial class NotNullList
+    [Migration("20240119020228_NewMap")]
+    partial class NewMap
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,26 +65,13 @@ namespace ArtistiqueCastingAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubCategorySlug")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Casting");
-                });
-
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingSubCategoryModel", b =>
-                {
-                    b.Property<Guid>("CastingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SubCategorySlug")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CastingId", "SubCategorySlug");
-
                     b.HasIndex("SubCategorySlug");
 
-                    b.ToTable("CastingSubCategory");
+                    b.ToTable("Casting");
                 });
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CategoryModel", b =>
@@ -101,24 +88,13 @@ namespace ArtistiqueCastingAPI.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryCategoryModel", b =>
-                {
-                    b.Property<string>("CategorySlug")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SubCategorySlug")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CategorySlug", "SubCategorySlug");
-
-                    b.HasIndex("SubCategorySlug");
-
-                    b.ToTable("SubCategoryCategory");
-                });
-
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
                 {
                     b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategorySlug")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -127,37 +103,39 @@ namespace ArtistiqueCastingAPI.Migrations
 
                     b.HasKey("Slug");
 
+                    b.HasIndex("CategorySlug");
+
                     b.ToTable("SubCategory");
                 });
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingSubCategoryModel", b =>
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
                 {
-                    b.HasOne("ArtistiqueCastingAPI.Models.CastingModel", null)
-                        .WithMany()
-                        .HasForeignKey("CastingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ArtistiqueCastingAPI.Models.SubCategoryModel", "SubCategory")
+                        .WithMany("Castings")
+                        .HasForeignKey("SubCategorySlug");
 
-                    b.HasOne("ArtistiqueCastingAPI.Models.SubCategoryModel", null)
-                        .WithMany()
-                        .HasForeignKey("SubCategorySlug")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryCategoryModel", b =>
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
                 {
-                    b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", null)
-                        .WithMany()
+                    b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
+                        .WithMany("SubCategories")
                         .HasForeignKey("CategorySlug")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ArtistiqueCastingAPI.Models.SubCategoryModel", null)
-                        .WithMany()
-                        .HasForeignKey("SubCategorySlug")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CategoryModel", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
+                {
+                    b.Navigation("Castings");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240119041653_NewMapManyToMany")]
-    partial class NewMapManyToMany
+    [Migration("20240119071048_NewMapWithManyToMany")]
+    partial class NewMapWithManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

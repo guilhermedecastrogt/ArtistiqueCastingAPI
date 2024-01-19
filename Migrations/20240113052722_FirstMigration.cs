@@ -31,7 +31,7 @@ namespace ArtistiqueCastingAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategorySlug = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CategorySlug = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,8 +40,7 @@ namespace ArtistiqueCastingAPI.Migrations
                         name: "FK_Casting_Category_CategorySlug",
                         column: x => x.CategorySlug,
                         principalTable: "Category",
-                        principalColumn: "Slug",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Slug");
                 });
 
             migrationBuilder.CreateTable(

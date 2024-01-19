@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240113021310_UpdateModels")]
-    partial class UpdateModels
+    [Migration("20240113052722_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,6 @@ namespace ArtistiqueCastingAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategorySlug")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -92,9 +91,7 @@ namespace ArtistiqueCastingAPI.Migrations
                 {
                     b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
                         .WithMany("Casting")
-                        .HasForeignKey("CategorySlug")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategorySlug");
 
                     b.Navigation("Category");
                 });
