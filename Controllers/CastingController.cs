@@ -8,10 +8,14 @@ namespace ArtistiqueCastingAPI.Controllers;
 public class CastingController : Controller
 {
     private readonly ICastingRepository _castingRepository;
-
+    private readonly ISubCategoryRepository _subCategoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    
     public CastingController()
     {
+        _categoryRepository = new CategoryRespository();
         _castingRepository = new CastingRepository();
+        _subCategoryRepository = new SubCategoryRepository();
     }
     
     [HttpGet]
@@ -28,12 +32,30 @@ public class CastingController : Controller
     
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(GetListCastingModel? model)
     {
         try
         {
-            List<CastingModel> list = await _castingRepository.List();
-            return Ok(list);
+            if ((model.CategorySlug == null &&
+                 model.SubCategorySlug == null &&
+                 model.SearchByName == null) ||
+                model == null)
+            {
+                List<SubCategoryModel> list = await _subCategoryRepository.List();
+                return Ok(list);
+            }
+            CategoryModel category = await _categoryRepository.GetBySlug(model.CategorySlug);
+            if (category != null)
+            {
+                List<CastingModel> listCasting = await _castingRepository
+                    .FilterByCategoryAndSubCategory(category.Slug, model.SubCategorySlug);
+                return Ok(listCasting);
+            }
+            return Ok();
+            //else if (model.SearchByName != null)
+            //{
+                //List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(model.SearchByName);
+            //}
         }
         catch (Exception ex)
         {
@@ -99,5 +121,6 @@ public class CastingController : Controller
             return BadRequest(new { message = $"Não foi possível deletar o casting. Erro: {ex.Message}" });
         }
     }
+    
 }
     

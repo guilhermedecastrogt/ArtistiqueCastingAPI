@@ -8,15 +8,17 @@ namespace ArtistiqueCastingAPI.Controllers;
 public class SubCategoryController : Controller
 {
     private readonly ISubCategoryRepository _subCategoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
     public SubCategoryController()
     {
+        _categoryRepository = new CategoryRespository();
         _subCategoryRepository = new SubCategoryRepository();
     }
     
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(GetListCastingModel model)
     {
         try
         {
@@ -82,4 +84,20 @@ public class SubCategoryController : Controller
         }
     }
     
+    [HttpGet]
+    [Route("getbycategory/{slug}")]
+    public async Task<IActionResult> GetByCategory(string slugCategory)
+    {
+        try
+        {
+            CategoryModel? category = await _categoryRepository.GetBySlug(slugCategory);
+            if(category == null) return BadRequest(new { message = "Categoria não encontrada." });
+            List<SubCategoryModel> list = await _subCategoryRepository.GetByCategory(slugCategory);
+            return Ok(list);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar as subcategorias. Erro: {ex.Message}" });
+        }
+    }    
 }

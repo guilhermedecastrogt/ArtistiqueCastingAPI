@@ -17,7 +17,18 @@ public class DataContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
+        modelBuilder.Entity<CastingModel>()
+            .HasOne(c => c.SubCategory)
+            .WithMany(s => s.Castings)
+            .HasForeignKey(c => c.SubCategorySlug)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<SubCategoryModel>()
+            .HasOne(s => s.Category)
+            .WithMany(c => c.SubCategories)
+            .HasForeignKey(s => s.CategorySlug)
+            .OnDelete(DeleteBehavior.SetNull);
+        
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

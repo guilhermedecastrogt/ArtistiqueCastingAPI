@@ -22,7 +22,7 @@ public class AuthenticationController : Controller
     [HttpPost]
     [Route("add")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> POST([FromBody] AuthenticationModel model)
+    public async Task<IActionResult> Add([FromBody] AuthenticationModel model)
     {
         if (ModelState.IsValid)
         {
