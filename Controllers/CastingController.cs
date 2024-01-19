@@ -1,5 +1,6 @@
 ﻿using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
+using ArtistiqueCastingAPI.Repository.MapsRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistiqueCastingAPI.Controllers;
@@ -10,12 +11,14 @@ public class CastingController : Controller
     private readonly ICastingRepository _castingRepository;
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly ICastingSubCategoryRepository _castingSubCategoryRepository;
     
     public CastingController()
     {
         _categoryRepository = new CategoryRespository();
         _castingRepository = new CastingRepository();
         _subCategoryRepository = new SubCategoryRepository();
+        _castingSubCategoryRepository = new CastingSubCategoryRepository();
     }
     
     [HttpGet]
@@ -32,7 +35,7 @@ public class CastingController : Controller
     
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> List(GetListCastingModel? model)
+    public async Task<IActionResult> List([FromBody] GetListCastingModel? model)
     {
         try
         {
@@ -41,7 +44,7 @@ public class CastingController : Controller
                  model.SearchByName == null) ||
                 model == null)
             {
-                List<SubCategoryModel> list = await _subCategoryRepository.List();
+                List<CastingModel> list = await _castingRepository.List();
                 return Ok(list);
             }
             CategoryModel category = await _categoryRepository.GetBySlug(model.CategorySlug);
@@ -65,13 +68,14 @@ public class CastingController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add([FromBody] CastingModel model)
+    public async Task<IActionResult> Add([FromBody] AddCastingModel model)
     {
         try
         {
             if (ModelState.IsValid)
             {
-                await _castingRepository.Add(model);
+                await _castingRepository.Add(model.Casting);
+                _castingSubCategoryRepository.Add(model.Casting.Id, model.SubCategorySlug);
                 return Ok(new { message = "Casting adicionado com sucesso!" });
             }
 

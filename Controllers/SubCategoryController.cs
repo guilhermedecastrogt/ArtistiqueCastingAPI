@@ -43,15 +43,15 @@ public class SubCategoryController : Controller
             if (ModelState.IsValid)
             {
                 CategoryModel? category = await _categoryRepository.GetBySlug(model.SlugCategory);
-                _subCategoryCategoryRepository.Add(model.SubCategory.Slug, model.SlugCategory);
                 await _subCategoryRepository.Add(model.SubCategory);
+                _subCategoryCategoryRepository.Add(model.SubCategory.Slug, model.SlugCategory);
                 return Ok(new { message = "Subcategoria adicionada com sucesso!" });
             }
-            return BadRequest(new{message = "Erro ao adicionar sebcategorias. ModelState inválido."});
+            return BadRequest(new{message = "Erro ao adicionar SubCategorias. ModelState inválido."});
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível adicionar a subcategoria. Erro: {ex}" });
+            return BadRequest(new { message = $"Não foi possível adicionar a SubCategoria. Erro: {ex.Message}" });
         }
     }
     
