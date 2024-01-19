@@ -1,5 +1,6 @@
 ﻿using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
+using ArtistiqueCastingAPI.Repository.MapsRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistiqueCastingAPI.Controllers;
@@ -9,11 +10,13 @@ public class SubCategoryController : Controller
 {
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly ISubCategoryCategoryRepository _subCategoryCategoryRepository;
 
     public SubCategoryController()
     {
         _categoryRepository = new CategoryRespository();
         _subCategoryRepository = new SubCategoryRepository();
+        _subCategoryCategoryRepository = new SubCategoryCategoryRepository();
     }
     
     [HttpGet]
@@ -40,7 +43,7 @@ public class SubCategoryController : Controller
             if (ModelState.IsValid)
             {
                 CategoryModel? category = await _categoryRepository.GetBySlug(model.SlugCategory);
-                //if(category != null) model.SubCategory.Category = category;
+                _subCategoryCategoryRepository.Add(model.SubCategory.Slug, model.SlugCategory);
                 await _subCategoryRepository.Add(model.SubCategory);
                 return Ok(new { message = "Subcategoria adicionada com sucesso!" });
             }

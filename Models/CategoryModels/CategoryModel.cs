@@ -8,5 +8,5 @@ public class CategoryModel
     public string Slug { get; set; }
     public string Name { get; set; }
 
-    public List<SubCategoryModel> SubCategories { get; set; }
+    public List<SubCategoryModel>? SubCategories { get; set; }
 }

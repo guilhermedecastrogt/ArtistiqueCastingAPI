@@ -9,5 +9,5 @@ public class SubCategoryModel
     public string Name { get; set; }
 
     public List<CastingModel>? Castings { get; set; }
-    public List<CategoryModel> Categories { get; set; }
+    public List<CategoryModel>? Categories { get; set; }
 }
