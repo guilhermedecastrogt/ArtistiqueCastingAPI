@@ -17,5 +17,5 @@ public class CastingModel
     public bool IsExclusive { get; set; }
     
     public string? SubCategorySlug { get; set; }
-    public virtual SubCategoryModel? SubCategory { get; set; }
+    public List<SubCategoryModel>? SubCategorys { get; set; }
 }

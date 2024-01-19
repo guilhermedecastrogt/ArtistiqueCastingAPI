@@ -15,17 +15,27 @@ public class DataContext : DbContext
     public DbSet<SubCategoryModel> SubCategory { get; set; }
     public DbSet<AuthenticationModel> Authentication { get; set; }
     
+    public DbSet<CastingSubCategoryModel> CastingSubCategory{ get; set; }
+
+    public DbSet<SubCategoryCategoryModel> SubCategoryCategory { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CastingModel>()
-            .HasOne(c => c.SubCategory)
-            .WithMany(s => s.Castings)
-            .HasForeignKey(c => c.SubCategorySlug);
-
+            .HasMany(e => e.SubCategorys)
+            .WithMany(e => e.Castings)
+            .UsingEntity<CastingSubCategoryModel>(
+                l => l.HasOne<SubCategoryModel>().WithMany().HasForeignKey(e => e.SubCategorySlug),
+                r => r.HasOne<CastingModel>().WithMany().HasForeignKey(e => e.CastingId)
+            );
+        
         modelBuilder.Entity<SubCategoryModel>()
-            .HasOne(s => s.Category)
-            .WithMany(c => c.SubCategories)
-            .HasForeignKey(s => s.CategorySlug);
+            .HasMany(e => e.Categories)
+            .WithMany(e => e.SubCategories)
+            .UsingEntity<SubCategoryCategoryModel>(
+                l => l.HasOne<CategoryModel>().WithMany().HasForeignKey(e => e.CategorySlug),
+                r => r.HasOne<SubCategoryModel>().WithMany().HasForeignKey(e => e.SubCategorySlug)
+            );
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -18,9 +18,10 @@ public class SubCategoryRepository: GenericsRepository<SubCategoryModel>, ISubCa
         using(var data = new DataContext(_context))
         {
             List<SubCategoryModel> subCategories = await data.SubCategory
-                .Include(c => c.Category)
-                .Where(c => c.Category.Slug == slugCategory)
+                .Include(x => x.Categories)
+                .Where(x => x.Categories.Any(x => x.Slug == slugCategory))
                 .ToListAsync();
+            
             return subCategories;
         }
     }

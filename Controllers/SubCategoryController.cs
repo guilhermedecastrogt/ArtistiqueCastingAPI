@@ -33,20 +33,22 @@ public class SubCategoryController : Controller
     
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> Add([FromBody] SubCategoryModel model)
+    public async Task<IActionResult> Add([FromBody] AddSubCategoryModel model)
     {
         try
         {
             if (ModelState.IsValid)
             {
-                await _subCategoryRepository.Add(model);
+                CategoryModel? category = await _categoryRepository.GetBySlug(model.SlugCategory);
+                //if(category != null) model.SubCategory.Category = category;
+                await _subCategoryRepository.Add(model.SubCategory);
                 return Ok(new { message = "Subcategoria adicionada com sucesso!" });
             }
             return BadRequest(new{message = "Erro ao adicionar sebcategorias. ModelState inválido."});
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível adicionar a subcategoria. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível adicionar a subcategoria. Erro: {ex}" });
         }
     }
     
