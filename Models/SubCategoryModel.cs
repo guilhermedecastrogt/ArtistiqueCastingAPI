@@ -9,5 +9,5 @@ public class SubCategoryModel
     public string Name { get; set; }
     public string CategorySlug { get; set; }
     public virtual CategoryModel? Category { get; set; }
-    public virtual ICollection<CastingModel> Castings { get; set; }
+    public virtual ICollection<CastingModel>? Castings { get; set; }
 }

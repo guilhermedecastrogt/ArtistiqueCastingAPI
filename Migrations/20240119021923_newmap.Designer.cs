@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240113052722_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20240119021923_newmap")]
+    partial class newmap
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,14 +25,29 @@ namespace ArtistiqueCastingAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.AuthenticationModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CategorySlug")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authentication");
+                });
+
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -42,13 +57,19 @@ namespace ArtistiqueCastingAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsExclusive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SubCategorySlug")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategorySlug");
+                    b.HasIndex("SubCategorySlug");
 
                     b.ToTable("Casting");
                 });
@@ -89,17 +110,17 @@ namespace ArtistiqueCastingAPI.Migrations
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
                 {
-                    b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
-                        .WithMany("Casting")
-                        .HasForeignKey("CategorySlug");
+                    b.HasOne("ArtistiqueCastingAPI.Models.SubCategoryModel", "SubCategory")
+                        .WithMany("Castings")
+                        .HasForeignKey("SubCategorySlug");
 
-                    b.Navigation("Category");
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
                 {
                     b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
-                        .WithMany("SubCategorysGroup")
+                        .WithMany("SubCategories")
                         .HasForeignKey("CategorySlug")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -109,9 +130,12 @@ namespace ArtistiqueCastingAPI.Migrations
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CategoryModel", b =>
                 {
-                    b.Navigation("Casting");
+                    b.Navigation("SubCategories");
+                });
 
-                    b.Navigation("SubCategorysGroup");
+            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
+                {
+                    b.Navigation("Castings");
                 });
 #pragma warning restore 612, 618
         }

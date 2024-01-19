@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240116012357_AuthenticationModel")]
-    partial class AuthenticationModel
+    [Migration("20240113021310_UpdateModels")]
+    partial class UpdateModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,24 +25,6 @@ namespace ArtistiqueCastingAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.AuthenticationModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authentication");
-                });
-
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -50,6 +32,7 @@ namespace ArtistiqueCastingAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategorySlug")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -59,9 +42,6 @@ namespace ArtistiqueCastingAPI.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsExclusive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -112,7 +92,9 @@ namespace ArtistiqueCastingAPI.Migrations
                 {
                     b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
                         .WithMany("Casting")
-                        .HasForeignKey("CategorySlug");
+                        .HasForeignKey("CategorySlug")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });

@@ -4,6 +4,7 @@ using ArtistiqueCastingAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240113022513_NullableCastingModel")]
+    partial class NullableCastingModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,29 +25,14 @@ namespace ArtistiqueCastingAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.AuthenticationModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authentication");
-                });
-
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategorySlug")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -54,19 +42,13 @@ namespace ArtistiqueCastingAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsExclusive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubCategorySlug")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SubCategorySlug");
+                    b.HasIndex("CategorySlug");
 
                     b.ToTable("Casting");
                 });
@@ -107,17 +89,17 @@ namespace ArtistiqueCastingAPI.Migrations
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CastingModel", b =>
                 {
-                    b.HasOne("ArtistiqueCastingAPI.Models.SubCategoryModel", "SubCategory")
-                        .WithMany("Castings")
-                        .HasForeignKey("SubCategorySlug");
+                    b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
+                        .WithMany("Casting")
+                        .HasForeignKey("CategorySlug");
 
-                    b.Navigation("SubCategory");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
                 {
                     b.HasOne("ArtistiqueCastingAPI.Models.CategoryModel", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany("SubCategorysGroup")
                         .HasForeignKey("CategorySlug")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -127,12 +109,9 @@ namespace ArtistiqueCastingAPI.Migrations
 
             modelBuilder.Entity("ArtistiqueCastingAPI.Models.CategoryModel", b =>
                 {
-                    b.Navigation("SubCategories");
-                });
+                    b.Navigation("Casting");
 
-            modelBuilder.Entity("ArtistiqueCastingAPI.Models.SubCategoryModel", b =>
-                {
-                    b.Navigation("Castings");
+                    b.Navigation("SubCategorysGroup");
                 });
 #pragma warning restore 612, 618
         }

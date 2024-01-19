@@ -6,11 +6,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ArtistiqueCastingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AuthenticationModel : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "IsExclusive",
+                table: "Casting",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.CreateTable(
                 name: "Authentication",
                 columns: table => new
@@ -30,6 +37,10 @@ namespace ArtistiqueCastingAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Authentication");
+
+            migrationBuilder.DropColumn(
+                name: "IsExclusive",
+                table: "Casting");
         }
     }
 }
