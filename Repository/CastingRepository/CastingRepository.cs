@@ -61,4 +61,13 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
             return results;
         }
     }
+
+    public async Task<List<CastingModel>> GetExclusives()
+    {
+        using (var data = new DataContext(_context))
+        {
+            return await data.Casting.AsNoTracking()
+                .Where(x => x.IsExclusive == true).ToListAsync();
+        }
+    }
 }

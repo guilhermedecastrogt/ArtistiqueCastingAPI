@@ -138,5 +138,18 @@ public class CastingController : Controller
         }
     }
     
+    [HttpGet]
+    [Route("list/exclusives")]
+    public async Task<IActionResult> GetExclusives()
+    {
+        try
+        {
+            return Ok(await _castingRepository.GetExclusives());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+        }
+    }
 }
     
