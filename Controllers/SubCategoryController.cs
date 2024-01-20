@@ -90,7 +90,7 @@ public class SubCategoryController : Controller
     }
     
     [HttpGet]
-    [Route("getbycategory/{slug}")]
+    [Route("getbycategory/{slugCategory}")]
     public async Task<IActionResult> GetByCategory([FromRoute]string slugCategory)
     {
         try
