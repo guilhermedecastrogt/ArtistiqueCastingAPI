@@ -25,4 +25,15 @@ public class CategoryRespository : GenericsRepository<CategoryModel>, ICategoryR
             return category;
         }
     }
+
+    public async Task<List<CategoryModel>?> GetCategoriesBySubCategory(string subcateogSlug)
+    {
+        using (var data = new DataContext(_context))
+        {
+            return await data.Category.AsNoTracking()
+                .Include(e => e.SubCategories)
+                .Where(e => e.SubCategories.Any(s => s.Slug == subcateogSlug))
+                .ToListAsync();
+        }
+    }
 }

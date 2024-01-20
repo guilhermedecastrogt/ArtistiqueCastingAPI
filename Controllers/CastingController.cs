@@ -151,5 +151,33 @@ public class CastingController : Controller
             return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
         }
     }
+
+    [HttpGet]
+    [Route("list/all")]
+    public async Task<IActionResult> All()
+    {
+        try
+        {
+            List<CastingModel> list = await _castingRepository.List();
+            foreach (var item in list)
+            {
+                item.SubCategorys = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
+                foreach (var subcateog in item.SubCategorys)
+                {
+                    subcateog.Castings = null;
+                    subcateog.Categories = await _categoryRepository.GetCategoriesBySubCategory(subcateog.Slug);
+                    foreach (var category in subcateog.Categories)
+                    {
+                        category.SubCategories = null;
+                    }
+                }
+            }
+            return Ok(list);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+        }
+    }
 }
     

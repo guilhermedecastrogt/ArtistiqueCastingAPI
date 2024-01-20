@@ -39,4 +39,15 @@ public class SubCategoryRepository: GenericsRepository<SubCategoryModel>, ISubCa
             return subcategory;
         }
     }
+
+    public async Task<List<SubCategoryModel>> GetSubCategoriesByCasting(Guid castingId)
+    {
+        using (var data = new DataContext(_context))
+        {
+            return await data.SubCategory
+                .Include(x => x.Castings)
+                .Where(e => e.Castings.Any(s => s.Id == castingId))
+                .ToListAsync();
+        }
+    }
 }

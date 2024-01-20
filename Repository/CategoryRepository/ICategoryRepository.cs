@@ -6,4 +6,5 @@ namespace ArtistiqueCastingAPI.Repository;
 public interface ICategoryRepository : IGenericsRepository<CategoryModel>
 {
     Task<CategoryModel> GetBySlug(string slug);
+    Task<List<CategoryModel>?> GetCategoriesBySubCategory(string subcateogSlug);
 }
