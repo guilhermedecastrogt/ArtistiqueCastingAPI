@@ -98,6 +98,10 @@ public class SubCategoryController : Controller
             CategoryModel? category = await _categoryRepository.GetBySlug(slugCategory);
             if(category == null) return BadRequest(new { message = "Categoria não encontrada." });
             List<SubCategoryModel> list = await _subCategoryRepository.GetByCategory(slugCategory);
+            foreach (var item in list)
+            {
+                item.Categories = null;
+            }
             return Ok(list);
         }
         catch (Exception ex)
