@@ -7,6 +7,7 @@ public class CategoryModel
     [Key]
     public string Slug { get; set; }
     public string Name { get; set; }
+    public string IconFontAlwesome { get; set; }
 
     public List<SubCategoryModel>? SubCategories { get; set; }
 }
