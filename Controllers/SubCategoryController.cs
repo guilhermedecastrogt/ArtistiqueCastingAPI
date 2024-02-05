@@ -109,4 +109,23 @@ public class SubCategoryController : Controller
             return BadRequest(new { message = $"Não foi possível listar as subcategorias. Erro: {ex.Message}" });
         }
     }    
+    
+    [HttpGet]
+    [Route("get-by-slug/{slug}")]
+    public async Task<IActionResult> GetBySlug([FromRoute] string slug)
+    {
+        try
+        {
+            SubCategoryModel? model = await _subCategoryRepository.GetBySlug(slug);
+            if (model == null)
+            {
+                return BadRequest(new { message = "Subcategoria não encontrada." });
+            }
+            return Ok(model);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar a subcategoria. Erro: {ex.Message}" });
+        }
+    }
 }
