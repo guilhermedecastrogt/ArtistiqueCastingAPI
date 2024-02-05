@@ -115,8 +115,6 @@ public class CategoryController : Controller
     [Route("get-by-slug/{slug}")]
     public async Task<IActionResult> GetBySlug([FromRoute] string slug)
     {
-        Console.WriteLine("-------------------- GET BY SLUG --------------------");
-        if(slug != null) Console.WriteLine(slug);
         if(slug == null) return BadRequest(new { message = "Slug não informado." });
         try
         {
