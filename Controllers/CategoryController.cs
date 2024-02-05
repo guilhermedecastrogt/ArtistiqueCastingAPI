@@ -112,7 +112,7 @@ public class CategoryController : Controller
     }
     
     [HttpGet]
-    [Route("get-by-slug")]
+    [Route("get-by-slug/{slug}")]
     public async Task<IActionResult> GetBySlug([FromRoute] string slug)
     {
         Console.WriteLine("-------------------- GET BY SLUG --------------------");
