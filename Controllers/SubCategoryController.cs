@@ -55,7 +55,7 @@ public class SubCategoryController : Controller
         }
     }
     
-    [HttpPut]
+    [HttpPost]
     [Route("update")]
     public async Task<IActionResult> Update([FromBody] UpdateSubCategoryModel model)
     {
