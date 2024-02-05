@@ -66,11 +66,13 @@ public class SubCategoryController : Controller
             
             await _subCategoryRepository.Delete(await _subCategoryRepository.GetBySlug(model.beforeSlug));
             
+            
             subCategory.Slug = model.slug;
             subCategory.Name = model.name;
             
             await _subCategoryRepository.Add(subCategory);
             
+            _subCategoryCategoryRepository.Delete(model.beforeSlug, model.categorySlug);
             _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
             
             return Ok(new { message = "Subcategoria atualizada com sucesso!" });

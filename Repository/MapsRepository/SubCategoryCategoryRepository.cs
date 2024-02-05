@@ -27,4 +27,14 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
             await data.SaveChangesAsync();
         }
     }
+    
+    public async void Delete(string subCategorySlug, string categorySlug)
+    {
+        using (var data = new DataContext(_context))
+        {
+            var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
+            data.SubCategoryCategory.Remove(subCategoryCategory);
+            await data.SaveChangesAsync();
+        }
+    }
 }
