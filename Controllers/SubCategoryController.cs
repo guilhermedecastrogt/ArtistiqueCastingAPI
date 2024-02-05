@@ -116,12 +116,18 @@ public class SubCategoryController : Controller
     {
         try
         {
-            SubCategoryModel? model = await _subCategoryRepository.GetBySlug(slug);
-            if (model == null)
-            {
-                return BadRequest(new { message = "Subcategoria não encontrada." });
+            SubCategoryModel? subcategory = await _subCategoryRepository.GetBySlug(slug);
+            SubCategoryGetBySlugModel model = new SubCategoryGetBySlugModel();
+            if(subcategory != null) {
+                model.name = subcategory.Name;
+                model.slug = subcategory.Slug;
+                List<CategoryModel>? category = await _categoryRepository.GetCategoriesBySubCategory(subcategory.Slug);
+                if(category != null) {
+                    model.categorySlug = category[0].Slug;
+                }
+                return Ok(model);
             }
-            return Ok(model);
+            return BadRequest(new { message = "Subcategoria não encontrada." });
         }
         catch (Exception ex)
         {
