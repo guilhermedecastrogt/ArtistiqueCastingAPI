@@ -74,8 +74,8 @@ public class SubCategoryController : Controller
 
             if (model.categorySlug != null)
             {
-                _subCategoryCategoryRepository.Delete(model.beforeSlug, model.categorySlug);
-                _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
+                bool checkDelete = await _subCategoryCategoryRepository.Delete(model.beforeSlug, model.categorySlug);
+                bool checkAdd = await _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
             }
             
             return Ok(new { message = "Subcategoria atualizada com sucesso!" });

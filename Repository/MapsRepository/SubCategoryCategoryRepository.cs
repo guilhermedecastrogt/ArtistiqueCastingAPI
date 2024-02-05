@@ -14,27 +14,43 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
         _context = new DbContextOptions<DataContext>();
     }
     
-    public async void Add(string subCategorySlug, string categorySlug)
+    public async Task<bool> Add(string subCategorySlug, string categorySlug)
     {
-        using (var data = new DataContext(_context))
+        try
         {
-            var subCategoryCategory = new SubCategoryCategoryModel()
+            using (var data = new DataContext(_context))
             {
-                CategorySlug = categorySlug,
-                SubCategorySlug = subCategorySlug
-            };
-            await data.SubCategoryCategory.AddAsync(subCategoryCategory);
-            await data.SaveChangesAsync();
+                var subCategoryCategory = new SubCategoryCategoryModel()
+                {
+                    CategorySlug = categorySlug,
+                    SubCategorySlug = subCategorySlug
+                };
+                await data.SubCategoryCategory.AddAsync(subCategoryCategory);
+                await data.SaveChangesAsync();
+                return true;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
     
-    public async void Delete(string subCategorySlug, string categorySlug)
+    public async Task<bool> Delete(string subCategorySlug, string categorySlug)
     {
-        using (var data = new DataContext(_context))
+        try
         {
-            var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
-            data.SubCategoryCategory.Remove(subCategoryCategory);
-            await data.SaveChangesAsync();
+            using (var data = new DataContext(_context))
+            {
+                var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
+                data.SubCategoryCategory.Remove(subCategoryCategory);
+                await data.SaveChangesAsync();
+                return true;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 }

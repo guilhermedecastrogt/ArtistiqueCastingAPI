@@ -4,6 +4,6 @@ namespace ArtistiqueCastingAPI.Repository.MapsRepository;
 
 public interface ISubCategoryCategoryRepository : IGenericsRepository<SubCategoryCategoryRepository>
 {
-    void Add(string subCategorySlug, string categorySlug);
-    void Delete(string subCategorySlug, string categorySlug);
+    Task<bool> Add(string subCategorySlug, string categorySlug);
+    Task<bool> Delete(string subCategorySlug, string categorySlug);
 }
