@@ -124,6 +124,7 @@ public class SubCategoryController : Controller
                 List<CategoryModel>? category = await _categoryRepository.GetCategoriesBySubCategory(subcategory.Slug);
                 if(category != null) {
                     model.categorySlug = category[0].Slug;
+                    model.categoryName = category[0].Name;
                 }
                 return Ok(model);
             }
