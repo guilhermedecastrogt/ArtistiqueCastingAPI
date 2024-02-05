@@ -57,16 +57,23 @@ public class SubCategoryController : Controller
     
     [HttpPut]
     [Route("update")]
-    public async Task<IActionResult> Update([FromBody] SubCategoryModel model)
+    public async Task<IActionResult> Update([FromBody] UpdateSubCategoryModel model)
     {
         try
         {
-            if (ModelState.IsValid)
-            {
-                await _subCategoryRepository.Update(model);
-                return Ok(new { message = "Subcategoria atualizada com sucesso!" });
-            }
-            return BadRequest(new { message = "Erro ao atualizar subcategoria. ModelState inválido." });
+            SubCategoryModel subCategory = await _subCategoryRepository.GetBySlug(model.beforeSlug);
+            if(subCategory == null) return BadRequest(new { message = "Subcategoria não encontrada." });
+            
+            await _subCategoryRepository.Delete(await _subCategoryRepository.GetBySlug(model.beforeSlug));
+            
+            subCategory.Slug = model.slug;
+            subCategory.Name = model.name;
+            
+            await _subCategoryRepository.Add(subCategory);
+            
+            _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
+            
+            return Ok(new { message = "Subcategoria atualizada com sucesso!" });
         }
         catch (Exception ex)
         {
