@@ -42,7 +42,7 @@ public class CastingController : Controller
         }
     }
     
-    [HttpGet]
+    [HttpPost]
     [Route("filter")]
     public async Task<IActionResult> Filter([FromBody] GetListCastingModel model)
     {
