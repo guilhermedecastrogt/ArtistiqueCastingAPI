@@ -73,6 +73,7 @@ public class CategoryController : Controller
                     
                     category.Slug = model.slug;
                     category.Name = model.name;
+                    category.IconFontAlwesome = model.iconFontAlwesome;
                     
                     await _categoryRepository.Add(category);
                     return Ok(new { message = "Categoria atualizada com sucesso!" });
