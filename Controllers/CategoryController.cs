@@ -67,13 +67,14 @@ public class CategoryController : Controller
             CategoryModel category = await _categoryRepository.GetBySlug(model.beforeSlug);
             if (category != null)
             {
+                category.Name = model.name;
+                category.IconFontAlwesome = model.iconFontAlwesome;
+                
                 if (model.slug != model.beforeSlug)
                 {
                     await _categoryRepository.Delete(await _categoryRepository.GetBySlug(model.beforeSlug));
                     
                     category.Slug = model.slug;
-                    category.Name = model.name;
-                    category.IconFontAlwesome = model.iconFontAlwesome;
                     
                     await _categoryRepository.Add(category);
                     return Ok(new { message = "Categoria atualizada com sucesso!" });
