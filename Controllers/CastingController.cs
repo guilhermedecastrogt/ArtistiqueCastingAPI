@@ -179,4 +179,21 @@ public class CastingController : Controller
             return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
         }
     }
+    
+    [HttpGet]
+    [Route("get-by-id/{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        try
+        {
+            CastingModel? casting = await _castingRepository.GetEntityById(id);
+            if(casting == null) return BadRequest(new { message = "Casting não encontrado" });
+            //casting.SubCategorys = await _subCategoryRepository.GetSubCategoriesByCasting(casting.Id);
+            return Ok(casting);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível buscar o casting. Erro: {ex.Message}" });
+        }
+    }
 }
