@@ -144,8 +144,7 @@ public class CastingController : Controller
     {
         try
         {
-            List<CastingModel> list = await _castingRepository.GetExclusives();
-            return Ok(list);
+            return Ok(await _castingRepository.GetExclusives());
         }
         catch (Exception ex)
         {
