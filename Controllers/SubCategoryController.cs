@@ -1,6 +1,7 @@
 ﻿using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
 using ArtistiqueCastingAPI.Repository.MapsRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistiqueCastingAPI.Controllers;
@@ -88,11 +89,15 @@ public class SubCategoryController : Controller
     
     [HttpDelete]
     [Route("delete")]
-    public async Task<IActionResult> Delete([FromBody] SubCategoryModel model)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete([FromBody] string slug)
     {
         try
         {
-            await _subCategoryRepository.Delete(model);
+            if(slug == null) return BadRequest(new { message = "Slug não informado." });
+            SubCategoryModel? subCategory = await _subCategoryRepository.GetBySlug(slug);
+            if(subCategory == null) return BadRequest(new { message = "Subcategoria não encontrada." });
+            await _subCategoryRepository.Delete(subCategory);
             return Ok(new { message = "Subcategoria removida com sucesso!" });
         }
         catch (Exception ex)
@@ -103,7 +108,7 @@ public class SubCategoryController : Controller
     
     [HttpGet]
     [Route("getbycategory/{slugCategory}")]
-    public async Task<IActionResult> GetByCategory([FromRoute]string slugCategory)
+    public async Task<IActionResult> GetListByCategory([FromRoute]string slugCategory)
     {
         try
         {

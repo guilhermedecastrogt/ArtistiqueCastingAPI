@@ -1,6 +1,7 @@
 ﻿using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
 using ArtistiqueCastingAPI.Repository.MapsRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistiqueCastingAPI.Controllers;
@@ -102,16 +103,14 @@ public class CastingController : Controller
     
     [HttpDelete]
     [Route("delete")]
-    public async Task<IActionResult> Delete([FromBody] CastingModel model)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete([FromBody] Guid id)
     {
         try
         {
-            if(ModelState.IsValid)
-            {
-                await _castingRepository.Delete(model);
-                return Ok(new { message = "Casting deletado com sucesso!" });
-            }
-            return BadRequest(new {message = "Não foi possível deletar o casting. Erro: ModelState inválido"});
+            if(id == null) return BadRequest(new { message = "Id não fornecido." });
+            await _castingRepository.Delete(await _castingRepository.GetEntityById(id));
+            return Ok(new { message = "Casting deletado com sucesso!" });
         }
         catch (Exception ex)
         {
