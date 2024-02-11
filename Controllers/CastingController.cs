@@ -1,6 +1,7 @@
 ﻿using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository;
 using ArtistiqueCastingAPI.Repository.MapsRepository;
+using ArtistiqueCastingAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,7 +70,11 @@ public class CastingController : Controller
             if (ModelState.IsValid)
             {
                 await _castingRepository.Add(model.Casting);
-                _castingSubCategoryRepository.Add(model.Casting.Id, model.SubCategorySlug);
+                List<string> subCategories = CastingServices.ConverteStringSubCategoriesToList(model.SubCategorySlug);
+                foreach (var subCategory in subCategories)
+                {
+                    _castingSubCategoryRepository.Add(model.Casting.Id, subCategory);
+                }
                 return Ok(new { message = "Casting adicionado com sucesso!" });
             }
 
@@ -187,7 +192,7 @@ public class CastingController : Controller
         {
             CastingModel? casting = await _castingRepository.GetEntityById(id);
             if(casting == null) return BadRequest(new { message = "Casting não encontrado" });
-            //casting.SubCategorys = await _subCategoryRepository.GetSubCategoriesByCasting(casting.Id);
+            casting.SubCategorys = await _subCategoryRepository.GetSubCategoriesByCasting(casting.Id);
             return Ok(casting);
         }
         catch (Exception ex)
