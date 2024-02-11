@@ -193,6 +193,7 @@ public class CastingController : Controller
             CastingModel? casting = await _castingRepository.GetEntityById(id);
             if(casting == null) return BadRequest(new { message = "Casting não encontrado" });
             casting.SubCategorys = await _subCategoryRepository.GetSubCategoriesByCasting(casting.Id);
+            casting.SubCategorys.ForEach(subCategory => subCategory.Castings = null);
             return Ok(casting);
         }
         catch (Exception ex)
