@@ -6,4 +6,5 @@ namespace ArtistiqueCastingAPI.Repository.MapsRepository;
 public interface ICastingSubCategoryRepository : IGenericsRepository<CastingSubCategoryModel>
 {
     void Add(Guid castingId, string subCategorySlug);
+    void RemoveAll(Guid castingId);
 }

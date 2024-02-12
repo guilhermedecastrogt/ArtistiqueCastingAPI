@@ -26,4 +26,15 @@ public class CastingSubCategoryRepository : GenericsRepository<CastingSubCategor
             await data.SaveChangesAsync();
         }
     }
+
+    public void RemoveAll(Guid castingId)
+    {
+        using (var data = new DataContext(_context))
+        {
+            data.CastingSubCategory.RemoveRange(
+                data.CastingSubCategory.Where(x => x.CastingId == castingId
+            ));
+            data.SaveChanges();
+        }
+    }
 }

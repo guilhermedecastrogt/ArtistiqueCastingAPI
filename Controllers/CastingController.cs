@@ -63,6 +63,7 @@ public class CastingController : Controller
     
     [HttpPost]
     [Route("add")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Add([FromBody] AddCastingModel model)
     {
         try
@@ -89,13 +90,20 @@ public class CastingController : Controller
     
     [HttpPut]
     [Route("update")]
-    public async Task<IActionResult> Update([FromBody] CastingModel model)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Update([FromBody] AddCastingModel model)
     {
         try
         {
             if (ModelState.IsValid)
             {
-                await _castingRepository.Update(model);
+                await _castingRepository.Update(model.Casting);
+                _castingSubCategoryRepository.RemoveAll(model.Casting.Id);
+                List<string> subCategories = CastingServices.ConverteStringSubCategoriesToList(model.SubCategorySlug);
+                foreach (var subCategory in subCategories)
+                {
+                    _castingSubCategoryRepository.Add(model.Casting.Id, subCategory);
+                }
                 return Ok(new { message = "Casting atualizado com sucesso!" });
             }
             return BadRequest(new {message = "Não foi possível atualizar o casting. Erro: ModelState inválido"});
