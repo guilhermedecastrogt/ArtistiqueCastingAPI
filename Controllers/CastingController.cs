@@ -88,7 +88,7 @@ public class CastingController : Controller
         }
     }
     
-    [HttpPut]
+    [HttpPost]
     [Route("update")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] AddCastingModel model)
