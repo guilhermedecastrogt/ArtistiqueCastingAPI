@@ -8,13 +8,11 @@ namespace ArtistiqueCastingAPI.Repository;
 public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepository
 {
     private readonly DbContextOptions<DataContext> _context;
-    private readonly ICastingRepository _castingRepository;
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly ICategoryRepository _categoryRepository;
     public CastingRepository()
     {
         _context = new DbContextOptions<DataContext>();
-        _castingRepository = new CastingRepository();
         _subCategoryRepository = new SubCategoryRepository();
         _categoryRepository = new CategoryRespository();
     }
@@ -79,32 +77,35 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
 
     public async Task<List<CastingTableModel>> ListCastingTable()
     {
-        List<CastingModel> list = await _castingRepository.List();
-        
-        var CastingTableModel = new List<CastingTableModel>();
-        
-        foreach (var item in list)
+        using (var data = new DataContext(_context))
         {
-            var subCategories = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
-            List<string> subCategoriesName = new List<string>();
-            foreach (var subCategory in subCategories)
+            List<CastingModel> list = await data.Casting.AsNoTracking().ToListAsync();
+        
+            var CastingTableModel = new List<CastingTableModel>();
+        
+            foreach (var item in list)
             {
-                subCategoriesName.Add(subCategory.Name);
+                var subCategories = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
+                List<string> subCategoriesName = new List<string>();
+                foreach (var subCategory in subCategories)
+                {
+                    subCategoriesName.Add(subCategory.Name);
+                }
+                
+                var category = await _categoryRepository.GetCategoriesBySubCategory(subCategories[0].Slug);
+                
+                var castingTableModel = new CastingTableModel
+                {
+                    Image = item.Image,
+                    Name = item.Name,
+                    Category = category[0].Name,
+                    SubCategories = subCategoriesName
+                };
+                
+                CastingTableModel.Add(castingTableModel);
             }
-                
-            var category = await _categoryRepository.GetCategoriesBySubCategory(subCategories[0].Slug);
-                
-            var castingTableModel = new CastingTableModel
-            {
-                Image = item.Image,
-                Name = item.Name,
-                Category = category[0].Name,
-                SubCategories = subCategoriesName
-            };
-                
-            CastingTableModel.Add(castingTableModel);
-        }
 
-        return CastingTableModel;
+            return CastingTableModel;
+        }
     }
 }
