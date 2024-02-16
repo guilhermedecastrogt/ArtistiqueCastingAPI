@@ -27,6 +27,10 @@ public class SubCategoryController : Controller
         try
         {
             List<SubCategoryModel> list = await _subCategoryRepository.List();
+            foreach (var item in list)
+            {
+                item.Categories = await _subCategoryCategoryRepository.GetCategoriesBySubCategory(item.Slug);
+            }
             return Ok(list);
         }
         catch (Exception ex)

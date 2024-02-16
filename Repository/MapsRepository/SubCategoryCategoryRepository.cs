@@ -53,4 +53,23 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
             return false;
         }
     }
+
+    public async Task<List<CategoryModel>> GetCategoriesBySubCategory(string slugSubCategory)
+    {
+        using (var data = new DataContext(_context))
+        {
+            List<SubCategoryCategoryModel> list = await data.SubCategoryCategory
+                .Where(x => x.SubCategorySlug == slugSubCategory).ToListAsync();
+
+            var listCategory = new List<CategoryModel>();
+            foreach (var item in list)
+            {
+                CategoryModel? category = await data.Category.FirstOrDefaultAsync
+                    (x => x.Slug == item.CategorySlug);
+                if (category != null) listCategory.Add(category);
+            }
+
+            return listCategory;
+        }
+    }
 }
