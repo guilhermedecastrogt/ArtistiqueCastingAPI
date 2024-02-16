@@ -107,8 +107,8 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
                     }
                 }
                 CastingTableModel.Add(castingTableModel);
-                Console.WriteLine("ADICIONOU");
             }
+            Console.WriteLine("ADICIONOU");
             return CastingTableModel;
         }
     }
