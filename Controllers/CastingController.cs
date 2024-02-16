@@ -35,8 +35,7 @@ public class CastingController : Controller
     {
         try
         {
-            List<CastingModel> list = await _castingRepository.List();
-            return Ok(list);
+            return Ok(await _castingRepository.ListCastingTable());
         }
         catch (Exception ex)
         {
