@@ -39,7 +39,7 @@ public class CastingController : Controller
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex}" });
         }
     }
     

@@ -82,29 +82,35 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
             List<CastingModel> list = await data.Casting.AsNoTracking().ToListAsync();
         
             var CastingTableModel = new List<CastingTableModel>();
-        
+
+            int i = 0;
             foreach (var item in list)
             {
-                var subCategories = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
-                List<string> subCategoriesName = new List<string>();
-                foreach (var subCategory in subCategories)
-                {
-                    subCategoriesName.Add(subCategory.Name);
-                }
-                
-                var category = await _categoryRepository.GetCategoriesBySubCategory(subCategories[0].Slug);
-                
                 var castingTableModel = new CastingTableModel
                 {
                     Image = item.Image,
-                    Name = item.Name,
-                    Category = category[0].Name,
-                    SubCategories = subCategoriesName
+                    Name = item.Name
                 };
                 
-                CastingTableModel.Add(castingTableModel);
-            }
+                var subCategories = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
 
+                if (subCategories.Any())
+                {
+                    List<string> subCategoriesName = subCategories.Select(subCategory => subCategory.Name).ToList();
+                    
+                    castingTableModel.SubCategories = subCategoriesName;
+                
+                    var category = await _categoryRepository.GetCategoriesBySubCategory(subCategories[0].Slug);
+
+                    if (category.Any())
+                    {
+                        castingTableModel.Category = category[0].Name;
+                    }
+                }
+                CastingTableModel.Add(castingTableModel);
+                Console.WriteLine("ADICIONOU: "+i);
+                i++;
+            }
             return CastingTableModel;
         }
     }
