@@ -87,7 +87,7 @@ public class SubCategoryController : Controller
         }
     }
     
-    [HttpDelete]
+    [HttpPost]
     [Route("delete")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromBody] string slug)
