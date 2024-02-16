@@ -114,7 +114,7 @@ public class CastingController : Controller
         }
     }
     
-    [HttpDelete]
+    [HttpPost]
     [Route("delete")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromBody] Guid id)
