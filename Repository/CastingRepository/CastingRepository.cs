@@ -83,7 +83,6 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
         
             var CastingTableModel = new List<CastingTableModel>();
 
-            int i = 0;
             foreach (var item in list)
             {
                 var castingTableModel = new CastingTableModel
@@ -108,8 +107,7 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
                     }
                 }
                 CastingTableModel.Add(castingTableModel);
-                Console.WriteLine("ADICIONOU: "+i);
-                i++;
+                Console.WriteLine("ADICIONOU");
             }
             return CastingTableModel;
         }
