@@ -136,8 +136,8 @@ public class CastingController : Controller
     {
         try
         {
-            List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(stringSearch);
-            return Ok(listCasting);
+            for(int i = 0; i <3; i++) Console.WriteLine("STRING SEARCH: " + stringSearch);
+            return Ok(await _castingRepository.SearchCastingByName(stringSearch));
         }
         catch (Exception ex)
         {
@@ -225,9 +225,7 @@ public class CastingController : Controller
     {
         try
         {
-            int count = await _castingRepository.CountCasting();
-            Console.WriteLine("COUNT:" + count);
-            return Ok(count);
+            return Ok(await _castingRepository.CountCasting());
         }
         catch (Exception ex)
         {
