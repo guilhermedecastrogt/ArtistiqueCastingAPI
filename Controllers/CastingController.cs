@@ -206,12 +206,27 @@ public class CastingController : Controller
     }
 
     [HttpGet]
-    [Route("list/geral")]
+    [Route("list/geral/{page}")]
     public async Task<IActionResult> Geral([FromRoute] int page)
     {
         try
         {
             return Ok(await _castingRepository.ListGeral(page));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+        }
+    }
+    
+    [HttpGet]
+    [Route("count")]
+    public async Task<IActionResult> Count()
+    {
+        try
+        {
+            var categories = await _castingRepository.CountCasting();
+            return Ok();
         }
         catch (Exception ex)
         {

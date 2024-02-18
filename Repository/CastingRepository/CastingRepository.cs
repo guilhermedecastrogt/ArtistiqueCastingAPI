@@ -137,16 +137,38 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
         }
     }
 
-    public async Task<List<CastingModel>> ListGeral(int page)
+    public async Task<List<CastingGeralModel>> ListGeral(int page)
     {
         page = page * 16;
         using (var data = new DataContext(_context))
         {
-            return await data.Casting
+            var castings = await data.Casting
                 .AsNoTracking()
                 .Skip(page)
                 .Take(16)
                 .ToListAsync();
+            
+            var castingsGeral = new List<CastingGeralModel>();
+            
+            foreach (var item in castings)
+            {
+                castingsGeral.Add(new CastingGeralModel
+                {
+                    id = item.Id,
+                    image = item.Image,
+                    name = item.Name
+                });
+            }
+            
+            return castingsGeral;
+        }
+    }
+
+    public async Task<int> CountCasting()
+    {
+        using (var data = new DataContext(_context))
+        {
+            return await data.Casting.CountAsync();
         }
     }
 }
