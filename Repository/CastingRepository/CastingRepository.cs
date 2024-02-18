@@ -59,6 +59,7 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
     
     public async Task<List<CastingModel>> SearchCastingByName(string modelSearchByName)
     {
+        modelSearchByName = modelSearchByName.Replace('-', ' ');
         modelSearchByName = modelSearchByName?.Trim();
 
         if (string.IsNullOrEmpty(modelSearchByName))

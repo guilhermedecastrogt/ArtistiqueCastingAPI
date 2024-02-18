@@ -136,8 +136,6 @@ public class CastingController : Controller
     {
         try
         {
-            if(stringSearch == null) return BadRequest(new { message = "String de busca não fornecida." });
-            for(int i = 0; i < 3; i++) Console.WriteLine("STRING SEARCH: " + stringSearch);
             return Ok(await _castingRepository.SearchCastingByName(stringSearch));
         }
         catch (Exception ex)
