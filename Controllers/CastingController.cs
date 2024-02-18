@@ -130,13 +130,14 @@ public class CastingController : Controller
         }
     }
     
-    [HttpPost]
-    [Route("search")]
-    public async Task<IActionResult> GetBySearch([FromBody] string stringSearch)
+    [HttpGet]
+    [Route("search/{stringSearch}")]
+    public async Task<IActionResult> GetBySearch([FromRoute] string stringSearch)
     {
         try
         {
-            for(int i = 0; i <3; i++) Console.WriteLine("STRING SEARCH: " + stringSearch);
+            if(stringSearch == null) return BadRequest(new { message = "String de busca não fornecida." });
+            for(int i = 0; i < 3; i++) Console.WriteLine("STRING SEARCH: " + stringSearch);
             return Ok(await _castingRepository.SearchCastingByName(stringSearch));
         }
         catch (Exception ex)
