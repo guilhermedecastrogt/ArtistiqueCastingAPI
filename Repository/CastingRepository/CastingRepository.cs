@@ -111,7 +111,8 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
                 var castingTableModel = new CastingTableModel
                 {
                     Image = item.Image,
-                    Name = item.Name
+                    Name = item.Name,
+                    Id = item.Id
                 };
                 
                 var subCategories = await _subCategoryRepository.GetSubCategoriesByCasting(item.Id);
