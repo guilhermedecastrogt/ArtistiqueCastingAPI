@@ -225,8 +225,8 @@ public class CastingController : Controller
     {
         try
         {
-            var categories = await _castingRepository.CountCasting();
-            return Ok();
+            int count = await _castingRepository.CountCasting();
+            return Ok(count);
         }
         catch (Exception ex)
         {
