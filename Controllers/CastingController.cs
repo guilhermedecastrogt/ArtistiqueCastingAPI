@@ -226,6 +226,7 @@ public class CastingController : Controller
         try
         {
             int count = await _castingRepository.CountCasting();
+            Console.WriteLine("COUNT:" + count);
             return Ok(count);
         }
         catch (Exception ex)
