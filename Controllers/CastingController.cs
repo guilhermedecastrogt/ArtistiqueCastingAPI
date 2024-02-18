@@ -204,4 +204,18 @@ public class CastingController : Controller
             return BadRequest(new { message = $"Não foi possível buscar o casting. Erro: {ex.Message}" });
         }
     }
+
+    [HttpGet]
+    [Route("list/geral")]
+    public async Task<IActionResult> Geral([FromRoute] int page)
+    {
+        try
+        {
+            return Ok(await _castingRepository.ListGeral(page));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Não foi possível listar os castings. Erro: {ex.Message}" });
+        }
+    }
 }

@@ -136,4 +136,17 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
             return CastingTableModel;
         }
     }
+
+    public async Task<List<CastingModel>> ListGeral(int page)
+    {
+        page = page * 16;
+        using (var data = new DataContext(_context))
+        {
+            return await data.Casting
+                .AsNoTracking()
+                .Skip(page)
+                .Take(16)
+                .ToListAsync();
+        }
+    }
 }

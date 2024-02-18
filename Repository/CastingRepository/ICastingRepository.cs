@@ -9,4 +9,5 @@ public interface ICastingRepository : IGenericsRepository<CastingModel>
     Task<List<CastingModel>> SearchCastingByName(string modelSearchByName);
     Task<List<CastingModel>> GetExclusives();
     Task<List<CastingTableModel>> ListCastingTable();
+    Task<List<CastingModel>> ListGeral(int page);
 }
