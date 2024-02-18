@@ -130,18 +130,14 @@ public class CastingController : Controller
         }
     }
     
-    [HttpGet]
+    [HttpPost]
     [Route("search")]
     public async Task<IActionResult> GetBySearch([FromBody] string stringSearch)
     {
         try
         {
-            if (ModelState.IsValid)
-            {
-                List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(stringSearch);
-                return Ok(listCasting);
-            }
-            return BadRequest(new {message = "Não foi possível buscar o casting. Erro: ModelState inválido"});
+            List<CastingModel> listCasting = await _castingRepository.SearchCastingByName(stringSearch);
+            return Ok(listCasting);
         }
         catch (Exception ex)
         {

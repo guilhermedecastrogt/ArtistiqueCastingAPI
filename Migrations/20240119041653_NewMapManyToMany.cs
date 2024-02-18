@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ArtistiqueCastingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMapWithManyToMany : Migration
+    public partial class NewMapManyToMany : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -112,8 +112,7 @@ namespace ArtistiqueCastingAPI.Migrations
                 name: "CategorySlug",
                 table: "SubCategory",
                 type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "SubCategorySlug",
@@ -146,8 +145,7 @@ namespace ArtistiqueCastingAPI.Migrations
                 table: "SubCategory",
                 column: "CategorySlug",
                 principalTable: "Category",
-                principalColumn: "Slug",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Slug");
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using ArtistiqueCastingAPI.Data;
+﻿using System.Globalization;
+using System.Text;
+using ArtistiqueCastingAPI.Data;
 using ArtistiqueCastingAPI.Models;
 using ArtistiqueCastingAPI.Repository.Generics;
 using Microsoft.EntityFrameworkCore;
+using ArtistiqueCastingAPI.Services;
 
 namespace ArtistiqueCastingAPI.Repository;
 
@@ -53,19 +56,39 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
             return castingsByCategory;
         }
     }
-
+    
     public async Task<List<CastingModel>> SearchCastingByName(string modelSearchByName)
     {
+        modelSearchByName = modelSearchByName?.Trim();
+
+        if (string.IsNullOrEmpty(modelSearchByName))
+        {
+            return new List<CastingModel>();
+        }
+
         using (var data = new DataContext(_context))
         {
-            List<CastingModel> results = await data.Casting.Where(e => EF.Functions.Like(
-                EF.Functions.Collate(
-                        e.Name, "SQL_Latin1_General_CP1_CI_AS"),
-                "%" + modelSearchByName.ToLower() + "%")).ToListAsync();
+            string collation = "SQL_Latin1_General_CP1_CI_AS";
+
+            var allRecords = await data.Casting.ToListAsync();
+
+            var results = allRecords
+                .Select(casting => new
+                {
+                    Casting = casting,
+                    Similarity = CastingServices.CalculateLevenshteinSimilarity(
+                        modelSearchByName.ToLower(), casting.Name.ToLower()
+                    )
+                })
+                .Where(result => result.Similarity <= 2)
+                .OrderBy(result => result.Similarity)
+                .Select(result => result.Casting)
+                .ToList();
+
             return results;
         }
     }
-
+    
     public async Task<List<CastingModel>> GetExclusives()
     {
         using (var data = new DataContext(_context))

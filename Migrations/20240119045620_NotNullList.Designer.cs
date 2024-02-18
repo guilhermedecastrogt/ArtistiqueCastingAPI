@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtistiqueCastingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240205155130_IconFontAwesome")]
-    partial class IconFontAwesome
+    [Migration("20240119045620_NotNullList")]
+    partial class NotNullList
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,10 +91,6 @@ namespace ArtistiqueCastingAPI.Migrations
                 {
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("IconFontAlwesome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

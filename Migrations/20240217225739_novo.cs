@@ -5,7 +5,7 @@
 namespace ArtistiqueCastingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class IconFontAwesome : Migration
+    public partial class novo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
