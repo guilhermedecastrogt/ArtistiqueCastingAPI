@@ -11,4 +11,6 @@ public interface ICastingRepository : IGenericsRepository<CastingModel>
     Task<List<CastingTableModel>> ListCastingTable();
     Task<List<CastingGeralModel>> ListGeral(int page);
     Task<int> CountCasting();
+    void DeleteSubCategory(Guid castingId, string subCategorySlug);
+    void AddSubCategory(Guid castingId, string subCategorySlug);
 }

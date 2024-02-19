@@ -185,4 +185,28 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
             return await data.Casting.CountAsync();
         }
     }
+
+    public async void DeleteSubCategory(Guid castingId, string subCategorySlug)
+    {
+        using (var data = new DataContext(_context))
+        {
+            data.Remove(await data.CastingSubCategory
+                .Where(x => x.CastingId == castingId && x.SubCategorySlug == subCategorySlug)
+                .FirstOrDefaultAsync());
+            await data.SaveChangesAsync();
+        }
+    }
+    
+    public async void AddSubCategory(Guid castingId, string subCategorySlug)
+    {
+        using (var data = new DataContext(_context))
+        {
+            data.Add(new CastingSubCategoryModel
+            {
+                CastingId = castingId,
+                SubCategorySlug = subCategorySlug
+            });
+            await data.SaveChangesAsync();
+        }
+    }
 }

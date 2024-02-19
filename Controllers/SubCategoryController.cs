@@ -12,9 +12,11 @@ public class SubCategoryController : Controller
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly ISubCategoryCategoryRepository _subCategoryCategoryRepository;
+    private readonly ICastingRepository _castingRepository;
 
     public SubCategoryController()
     {
+        _castingRepository = new CastingRepository();
         _categoryRepository = new CategoryRespository();
         _subCategoryRepository = new SubCategoryRepository();
         _subCategoryCategoryRepository = new SubCategoryCategoryRepository();
@@ -68,14 +70,27 @@ public class SubCategoryController : Controller
         {
             SubCategoryModel subCategory = await _subCategoryRepository.GetBySlug(model.beforeSlug);
             if(subCategory == null) return BadRequest(new { message = "Subcategoria não encontrada." });
+
+            List<CategoryModel>? categories = await _categoryRepository.GetCategoriesBySubCategory(model.beforeSlug);
+            
+            List<CastingModel> castings = await _castingRepository
+                .FilterByCategoryAndSubCategory(categories[1].Slug, model.beforeSlug);
+            foreach (var item in castings)
+            {
+                _castingRepository.DeleteSubCategory(item.Id, model.beforeSlug);
+            }
             
             await _subCategoryRepository.Delete(await _subCategoryRepository.GetBySlug(model.beforeSlug));
-            
             
             subCategory.Slug = model.slug;
             subCategory.Name = model.name;
             
             await _subCategoryRepository.Add(subCategory);
+
+            foreach (var item in castings)
+            {
+                _castingRepository.AddSubCategory(item.Id, model.slug);
+            }
 
             if (model.categorySlug != null)
             {
