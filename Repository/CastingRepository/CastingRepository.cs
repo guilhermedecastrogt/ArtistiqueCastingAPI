@@ -103,7 +103,18 @@ public class CastingRepository : GenericsRepository<CastingModel>, ICastingRepos
     {
         using (var data = new DataContext(_context))
         {
-            List<CastingModel> list = await data.Casting.AsNoTracking().ToListAsync();
+            List<CastingModel> list = await data.Casting.AsNoTracking().Take(30).ToListAsync();
+            await Task.Delay(1000);
+            if (list.Count == 30)
+            {
+                var tempList = await data.Casting.AsNoTracking().Skip(30).Take(30).ToListAsync();
+                while (tempList != null)
+                {
+                    list.AddRange(tempList);
+                    await Task.Delay(1000);
+                    tempList = await data.Casting.AsNoTracking().Skip(list.Count).Take(30).ToListAsync();
+                }
+            }
         
             var CastingTableModel = new List<CastingTableModel>();
 
