@@ -210,7 +210,7 @@ public class CastingController : Controller
     {
         try
         {
-            return Ok(await _castingRepository.ListGeral(page));
+            return Ok(await _castingRepository.ListGeral(page-1));
         }
         catch (Exception ex)
         {
