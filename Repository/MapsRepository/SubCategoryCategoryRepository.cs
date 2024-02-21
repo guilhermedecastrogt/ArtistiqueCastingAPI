@@ -14,44 +14,31 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
         _context = new DbContextOptions<DataContext>();
     }
     
-    public async Task<bool> Add(string subCategorySlug, string categorySlug)
+    public async void Add(string subCategorySlug, string categorySlug)
     {
-        try
+
+        using (var data = new DataContext(_context))
         {
-            using (var data = new DataContext(_context))
+            var subCategoryCategory = new SubCategoryCategoryModel()
             {
-                var subCategoryCategory = new SubCategoryCategoryModel()
-                {
-                    CategorySlug = categorySlug,
-                    SubCategorySlug = subCategorySlug
-                };
-                await data.SubCategoryCategory.AddAsync(subCategoryCategory);
-                await data.SaveChangesAsync();
-                return true;
-            }
-        }
-        catch (Exception)
-        {
-            return false;
+                CategorySlug = categorySlug,
+                SubCategorySlug = subCategorySlug
+            };
+            await data.SubCategoryCategory.AddAsync(subCategoryCategory);
+            await data.SaveChangesAsync();
         }
     }
     
-    public async Task<bool> Delete(string subCategorySlug, string categorySlug)
+    public async void Delete(string subCategorySlug, string categorySlug)
     {
-        try
+
+        using (var data = new DataContext(_context))
         {
-            using (var data = new DataContext(_context))
-            {
-                var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
-                data.SubCategoryCategory.Remove(subCategoryCategory);
-                await data.SaveChangesAsync();
-                return true;
-            }
+            var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
+            data.SubCategoryCategory.Remove(subCategoryCategory);
+            await data.SaveChangesAsync();
         }
-        catch (Exception)
-        {
-            return false;
-        }
+
     }
 
     public async Task<List<CategoryModel>> GetCategoriesBySubCategory(string slugSubCategory)
@@ -70,6 +57,16 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
             }
 
             return listCategory;
+        }
+    }
+
+    public async void DeleteAllCategoriesOfSubCategory(string slugSubCategory)
+    {
+        using (var data = new DataContext(_context))
+        {
+            data.SubCategoryCategory.RemoveRange(await data.SubCategoryCategory
+                .Where(x => x.SubCategorySlug == slugSubCategory).ToListAsync());
+            await data.SaveChangesAsync();
         }
     }
 }

@@ -70,32 +70,41 @@ public class SubCategoryController : Controller
         {
             SubCategoryModel subCategory = await _subCategoryRepository.GetBySlug(model.beforeSlug);
             if(subCategory == null) return BadRequest(new { message = "Subcategoria não encontrada." });
+            if(model.beforeSlug == null) return BadRequest(new { message = "Slug novo slug não pode ser null." });
 
-            List<CategoryModel>? categories = await _categoryRepository.GetCategoriesBySubCategory(model.beforeSlug);
             
+            //Get all castings and all categories of subcategory
+            List<CategoryModel>? categories = await _categoryRepository.GetCategoriesBySubCategory(model.beforeSlug);
             List<CastingModel> castings = await _castingRepository
-                .FilterByCategoryAndSubCategory(categories[1].Slug, model.beforeSlug);
+                .FilterByCategoryAndSubCategory(categories[0].Slug, model.beforeSlug);
+            
+            // Remove subcategory of all castings
             foreach (var item in castings)
             {
                 _castingRepository.DeleteSubCategory(item.Id, model.beforeSlug);
             }
             
+            // Remove all categories of subcategory
+            _subCategoryCategoryRepository.DeleteAllCategoriesOfSubCategory(model.beforeSlug);
+            
             await _subCategoryRepository.Delete(await _subCategoryRepository.GetBySlug(model.beforeSlug));
             
+            // Add new subcategory
             subCategory.Slug = model.slug;
             subCategory.Name = model.name;
-            
             await _subCategoryRepository.Add(subCategory);
-
+            
+            // Update category of subcategory
+            if (model.categorySlug != null)
+            {
+                _subCategoryCategoryRepository.Delete(model.beforeSlug, model.categorySlug);
+                _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
+            }
+            
+            // Add subcategory to before castings
             foreach (var item in castings)
             {
                 _castingRepository.AddSubCategory(item.Id, model.slug);
-            }
-
-            if (model.categorySlug != null)
-            {
-                bool checkDelete = await _subCategoryCategoryRepository.Delete(model.beforeSlug, model.categorySlug);
-                bool checkAdd = await _subCategoryCategoryRepository.Add(subCategory.Slug, model.categorySlug);
             }
             
             return Ok(new { message = "Subcategoria atualizada com sucesso!" });
@@ -124,7 +133,7 @@ public class SubCategoryController : Controller
             return BadRequest(new { message = $"Não foi possível remover a subcategoria. Erro: {ex.Message}" });
         }
     }
-    
+
     [HttpGet]
     [Route("getbycategory/{slugCategory}")]
     public async Task<IActionResult> GetListByCategory([FromRoute]string slugCategory)
