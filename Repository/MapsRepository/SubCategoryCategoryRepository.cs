@@ -35,10 +35,13 @@ public class SubCategoryCategoryRepository : GenericsRepository<SubCategoryCateg
         using (var data = new DataContext(_context))
         {
             var subCategoryCategory = await data.SubCategoryCategory.FirstOrDefaultAsync(x => x.CategorySlug == categorySlug && x.SubCategorySlug == subCategorySlug);
-            data.SubCategoryCategory.Remove(subCategoryCategory);
-            await data.SaveChangesAsync();
+            if (subCategoryCategory != null)
+            {
+                                
+                data.SubCategoryCategory.Remove(subCategoryCategory);
+                await data.SaveChangesAsync();
+            }
         }
-
     }
 
     public async Task<List<CategoryModel>> GetCategoriesBySubCategory(string slugSubCategory)

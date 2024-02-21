@@ -38,6 +38,7 @@ public class AuthenticationController : Controller
     {
         try
         {
+            // Login ambient production - id: "f9613241-f5b6-4308-8c94-8f9ab0d02845", password: "123321"
             AuthenticationModel? authentication = await _authenticationRepository.GetLogin(model);
             if (authentication == null) return NotFound(new{message = "Authentication not found"});
             string token = TokenService.GenerateToken(authentication);
