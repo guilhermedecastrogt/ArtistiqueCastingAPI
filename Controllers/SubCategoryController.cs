@@ -68,14 +68,14 @@ public class SubCategoryController : Controller
     {
         try
         {
-            SubCategoryModel subCategory = await _subCategoryRepository.GetBySlug(model.beforeSlug);
+            SubCategoryModel? subCategory = await _subCategoryRepository.GetBySlug(model.beforeSlug);
             if(subCategory == null) return BadRequest(new { message = "Subcategoria não encontrada." });
             if(model.beforeSlug == null) return BadRequest(new { message = "Slug novo slug não pode ser null." });
 
             
             //Get all castings and all categories of subcategory
             List<CategoryModel>? categories = await _categoryRepository.GetCategoriesBySubCategory(model.beforeSlug);
-            List<CastingModel> castings = await _castingRepository
+            List<CastingModel>? castings = await _castingRepository
                 .FilterByCategoryAndSubCategory(categories[0].Slug, model.beforeSlug);
             
             // Remove subcategory of all castings
@@ -112,7 +112,7 @@ public class SubCategoryController : Controller
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = $"Não foi possível atualizar a subcategoria. Erro: {ex.Message}" });
+            return BadRequest(new { message = $"Não foi possível atualizar a subcategoria. Erro: {ex}" });
         }
     }
     
