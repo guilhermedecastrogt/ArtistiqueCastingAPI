@@ -61,7 +61,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo()
     {
-        Title = "apiDataDriven", Version = "v1"
+        Title = "ArtistiqueAPI", Version = "v1"
     });
 });
 
